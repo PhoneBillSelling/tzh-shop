@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.netlify.nimble_beignet_c1dad9.twa",
+        "sha256_cert_fingerprints": ["5D:EA:10:76:C7:C5:59:2C:BC:4E:26:6D:B2:EE:8B:52:EB:8A:8B:46:98:D8:5B:FD:28:10:BF:E7:11:29:3B:C6"]
+      }
+    }]
