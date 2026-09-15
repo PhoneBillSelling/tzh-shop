@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>THAN ZAW HTUT Shop</title>
+<style>
+:root{--bg:#f4f5fa;--card:#fff;--ink:#161a2b;--muted:#737a8c;--brand:#4f46e5;--brand2:#06b6d4;--ok:#16a34a;--warn:#f59e0b;--bad:#dc2626;--line:#e6e8f0;--r:16px;--viber:#7360F2;--sh:0 2px 10px rgba(20,25,60,.06);}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Pyidaungsu','Myanmar Text','Noto Sans Myanmar',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);padding-bottom:80px;min-height:100vh;}
+#authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#4f46e5 0%,#06b6d4 100%);}
+.auth-card{background:#fff;border-radius:22px;padding:26px 22px 22px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.auth-logo{text-align:center;margin-bottom:20px}
+.auth-logo .mark{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#4f46e5,#06b6d4);display:grid;place-items:center;font-size:30px;color:#fff;margin:0 auto 10px}
+.auth-logo h1{margin:0;font-size:19px;font-weight:800;color:var(--brand)}
+.auth-logo p{margin:4px 0 0;font-size:11.5px;color:var(--muted)}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11.5px;font-weight:700;color:#3d4258;margin-bottom:6px}
+.field label .req{color:var(--bad)}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;font:inherit;font-size:13.5px;outline:none;background:#fff;font-family:inherit}
+.field textarea{resize:vertical;min-height:100px;line-height:1.6;font-family:monospace;font-size:11px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+.field .msgerr{font-size:10.5px;color:var(--bad);margin-top:4px;display:none;font-weight:600}
+.field .msgerr.show{display:block}
+.phone-wrap{display:flex;align-items:stretch;border:1.5px solid var(--line);border-radius:11px;overflow:hidden;background:#fff}
+.phone-prefix{background:#f0f2fa;padding:11px 13px;font-weight:800;font-size:13.5px;color:var(--brand);display:flex;align-items:center;border-right:1.5px solid var(--line);min-width:46px;justify-content:center}
+.phone-wrap input{border:0!important;border-radius:0!important;box-shadow:none!important;flex:1;padding-left:12px;background:transparent}
+.btn{border:0;border-radius:11px;padding:12px 16px;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;width:100%}
+.btn.primary{background:var(--brand);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.28)}
+.btn.primary:disabled{background:#c7c9d9;box-shadow:none;cursor:not-allowed}
+.btn.ok{background:var(--ok);color:#fff}
+.btn.bad{background:#fee2e2;color:var(--bad)}
+.btn.ghost{background:#eef0f8;color:var(--ink)}
+.btn.sm{padding:7px 12px;font-size:12px;width:auto}
+.info-box{background:#eef4ff;border:1px solid #dbe6ff;color:#2b4a94;border-radius:12px;padding:11px 13px;font-size:11.5px;line-height:1.7;margin-bottom:14px}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:42px}
+.pw-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:16px;cursor:pointer}
+#appScreen{display:none}
+#appScreen.on{display:block}
+header{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid var(--line);padding:9px 12px 10px;display:flex;flex-direction:column;gap:8px;box-shadow:0 1px 6px rgba(20,25,60,.04)}
+.hrow1{display:flex;align-items:center;gap:8px}
+.hrow2{display:flex;justify-content:center;gap:8px}
+.logo{font-weight:800;font-size:14.5px;color:var(--brand);line-height:1.1}
+.logo small{display:block;font-size:9.5px;color:var(--muted);font-weight:500}
+.spacer{flex:1}
+.seg{display:flex;background:#eef0f8;border-radius:99px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:99px;font:inherit;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer}
+.seg button.on{background:#fff;color:var(--brand)}
+.user-chip{display:flex;align-items:center;gap:6px;background:#f0f2fa;border-radius:11px;padding:5px 10px 5px 6px;cursor:pointer}
+.user-chip .av{width:26px;height:26px;border-radius:8px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}
+.user-chip .un{font-size:11.5px;font-weight:700;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.viber-btn{display:flex;align-items:center;gap:7px;background:var(--viber);color:#fff;text-decoration:none;padding:7px 13px;border-radius:11px}
+.viber-btn svg{width:18px;height:18px}
+.vib-info small{font-size:11px;font-weight:700;white-space:nowrap}
+.cartbtn{position:relative;border:0;background:#eef0f8;width:38px;height:38px;border-radius:12px;font-size:17px;cursor:pointer}
+.cartbtn .cnt{position:absolute;top:-5px;right:-5px;background:var(--bad);color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:99px;display:grid;place-items:center;padding:0 4px}
+main{max-width:1100px;margin:0 auto;padding:14px}
+.card{background:var(--card);border-radius:var(--r);padding:14px;box-shadow:var(--sh);margin-bottom:14px}
+.card h3{margin:0 0 12px;font-size:15px;display:flex;align-items:center;gap:6px}
+.card h3 .r{margin-left:auto;font-size:12px;color:var(--muted);font-weight:500}
+.empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:13px}
+.empty.big{padding:70px 10px;font-size:15px}
+.banner{border-radius:18px;color:#fff;position:relative;overflow:hidden;margin-bottom:14px;height:158px;display:flex;flex-direction:column;justify-content:center;padding:18px 20px 28px}
+.banner-tag{display:inline-block;background:rgba(255,255,255,.25);font-size:10px;font-weight:800;padding:3px 9px;border-radius:99px;width:fit-content;margin-bottom:8px}
+.banner h3{margin:0 0 5px;font-size:19px;line-height:1.25}
+.banner p{margin:0;font-size:12.5px;opacity:.92}
+.dots{position:absolute;bottom:11px;left:20px;display:flex;gap:5px}
+.dot{width:7px;height:7px;border-radius:99px;background:rgba(255,255,255,.45);cursor:pointer}
+.dot.on{background:#fff;width:20px}
+.searchbar{margin-bottom:10px}
+.searchbar input{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 14px;font:inherit;font-size:13px;outline:none}
+.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:10px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--muted);padding:7px 13px;border-radius:99px;font:inherit;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+.pcard{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;border:1px solid transparent}
+.pcard.out{opacity:.55}
+.pimg{height:98px;background:linear-gradient(135deg,#eef1ff,#e6f7ff);display:grid;place-items:center;font-size:40px;position:relative}
+.badge{position:absolute;top:7px;font-size:10px;font-weight:800;padding:3px 7px;border-radius:99px;color:#fff}
+.badge.disc{left:7px;background:var(--bad)}
+.badge.outb{right:7px;background:#64748b}
+.pbody{padding:9px 10px 10px;display:flex;flex-direction:column;flex:1;gap:3px}
+.pname{font-size:12.5px;font-weight:700;line-height:1.35;min-height:34px}
+.pcat{font-size:10px;color:var(--muted)}
+.pprice{font-size:14px;font-weight:800;color:var(--brand)}
+.pprice small{font-size:10px}
+.pstock{font-size:10px;color:var(--muted);margin-bottom:5px}
+.btn.add{background:#eef0ff;color:var(--brand);margin-top:auto;padding:9px 12px;font-size:12.5px;font-weight:800;border:0;border-radius:10px;width:100%;cursor:pointer}
+.btn.add:disabled{background:#f1f2f6;color:#a9aec0}
+.citem{display:flex;gap:11px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.cicon{width:48px;height:48px;border-radius:12px;background:#eef1ff;display:grid;place-items:center;font-size:23px;flex-shrink:0}
+.cinfo{flex:1;min-width:0}
+.cinfo b{font-size:12.5px;display:block}
+.cinfo span{font-size:11px;color:var(--muted)}
+.qty{display:flex;align-items:center;background:#eef0f8;border-radius:9px;overflow:hidden}
+.qty button{border:0;background:transparent;width:28px;height:28px;font-size:15px;font-weight:800;color:var(--brand);cursor:pointer}
+.qty b{min-width:24px;text-align:center;font-size:12.5px}
+.sumrow{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;color:var(--muted)}
+.sumrow.total{font-size:17px;font-weight:800;color:var(--ink);border-top:1px dashed var(--line);margin-top:8px;padding-top:11px}
+.sumrow.total span:last-child{color:var(--brand)}
+.checkrow{background:#eef4ff;border:1px solid #dbe6ff;border-radius:12px;padding:11px 12px;margin:12px 0 10px;display:flex;align-items:flex-start;gap:9px;cursor:pointer}
+.checkrow input{width:20px;height:20px;accent-color:var(--brand);flex-shrink:0}
+.checkrow label{font-size:12.5px;font-weight:700;color:#1e3a8a;line-height:1.45;cursor:pointer}
+.checkrow label small{display:block;font-weight:500;color:#5b6b96;font-size:10.5px;margin-top:2px}
+.ocard{border:1px solid var(--line);border-radius:13px;padding:11px;margin-bottom:10px}
+.ohead{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.oid{font-weight:800;font-size:12.5px}
+.odate{font-size:11px;color:var(--muted);margin-left:auto}
+.st{padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:800}
+.st.pending{background:#fef3c7;color:#b45309}
+.st.approved{background:#dcfce7;color:#15803d}
+.st.rejected{background:#fee2e2;color:#b91c1c}
+.oitems{font-size:11.5px;color:var(--muted);line-height:1.7}
+.receipt-thumb{margin-top:8px;max-width:120px;max-height:120px;border-radius:8px;border:1px solid var(--line);cursor:pointer;object-fit:cover}
+.ofoot{display:flex;align-items:center;gap:8px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);flex-wrap:wrap}
+.ofoot .amt{font-weight:800;color:var(--brand);font-size:14px;margin-right:auto}
+.ref{font-size:10px;color:var(--muted);font-family:monospace}
+.arow{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.arow .n{flex:1;min-width:120px;font-size:12.5px;font-weight:700}
+.arow .n small{display:block;font-weight:500;color:var(--muted);font-size:10.5px;margin-top:2px}
+.thumb{width:56px;height:42px;border-radius:9px;flex-shrink:0;background:#eef1ff;display:grid;place-items:center;font-size:22px}
+.modal-back{position:fixed;inset:0;background:rgba(16,20,40,.5);display:none;align-items:flex-end;justify-content:center;z-index:200}
+.modal-back.on{display:flex}
+.sheet{background:#fff;width:100%;max-width:460px;border-radius:22px 22px 0 0;padding:18px;max-height:92vh;overflow:auto;position:relative}
+.sheet h3{margin:0 0 14px;font-size:16px}
+.sheet .close{position:absolute;top:14px;right:16px;border:0;background:#eef0f8;width:30px;height:30px;border-radius:99px;font-size:15px;cursor:pointer}
+.notice{background:#eef4ff;border:1px solid #dbe6ff;color:#2b4a94;border-radius:12px;padding:10px 12px;font-size:11.5px;line-height:1.7;margin-bottom:12px}
+.qrwrap{text-align:center;padding:10px 0 4px}
+.qrwrap img{border-radius:14px;border:1px solid var(--line);padding:10px;background:#fff;width:280px;height:280px}
+.qramt{font-size:26px;font-weight:800;color:var(--brand);margin:12px 0 2px}
+.qrhint{font-size:11.5px;color:var(--muted);margin-bottom:12px}
+.qrcard{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:#fafbff}
+.qrcard.on{border-color:var(--brand);background:#eef4ff}
+.qrcard .qh{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.qrcard .qb{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;display:grid;place-items:center;font-size:16px;font-weight:800}
+.qrcard .qn{flex:1;font-size:13px;font-weight:800}
+.qrcard .qs{font-size:10px;color:var(--muted);font-family:monospace;word-break:break-all;line-height:1.5;background:#fff;padding:8px;border-radius:8px;border:1px solid var(--line);max-height:80px;overflow:auto}
+nav#tabbar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:70;padding:6px 4px 8px;box-shadow:0 -2px 14px rgba(20,25,60,.06)}
+nav#tabbar button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;font:inherit;font-size:9.5px;font-weight:700;color:var(--muted);cursor:pointer;padding:5px 2px;position:relative}
+nav#tabbar button .ic{font-size:19px;line-height:1}
+nav#tabbar button.on{color:var(--brand)}
+nav#tabbar button .cnt{position:absolute;top:0;right:50%;margin-right:-22px;background:var(--bad);color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:99px;display:grid;place-items:center;padding:0 4px}
+nav#tabbar.scrollable{overflow-x:auto;justify-content:flex-start;padding-left:8px;padding-right:8px;scrollbar-width:none}
+nav#tabbar.scrollable::-webkit-scrollbar{display:none}
+nav#tabbar.scrollable button{flex:0 0 auto;min-width:66px}
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:#161a2b;color:#fff;padding:11px 18px;border-radius:99px;font-size:12.5px;font-weight:700;z-index:900;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis}
+.ucard{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--line);border-radius:13px;margin-bottom:9px;background:#fff;flex-wrap:wrap}
+.ucard .av{width:42px;height:42px;border-radius:12px;flex-shrink:0;display:grid;place-items:center;font-size:16px;font-weight:800;color:#fff}
+.ucard .info{flex:1;min-width:140px}
+.ucard .info b{display:block;font-size:13px;font-weight:800}
+.ucard .info small{display:block;font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+.ucard .acts{display:flex;gap:5px;flex-wrap:wrap}
+.roletag{display:inline-block;font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:99px;margin-right:4px}
+.roletag.admin{background:#fef3c7;color:#b45309}
+.roletag.user{background:#dcfce7;color:#15803d}
+.roletag.suspended{background:#fee2e2;color:#b91c1c}
+.cbox{display:flex;align-items:center;gap:9px;background:#f4f5fa;border:1px solid var(--line);border-radius:11px;padding:10px 12px;margin-bottom:13px;cursor:pointer}
+.cbox input{width:20px;height:20px;accent-color:var(--brand)}
+.cbox span{font-size:12.5px;font-weight:700}
+.ann-body{font-size:13px;line-height:1.75;color:var(--ink);background:#f4f5fa;padding:13px 14px;border-radius:12px;margin-bottom:14px;white-space:pre-wrap;word-break:break-word}
+.bn-prev{border-radius:14px;color:#fff;padding:14px 16px;margin-bottom:12px}
+.bn-prev .t{font-size:10px;font-weight:800;background:rgba(255,255,255,.25);padding:2px 8px;border-radius:99px;display:inline-block;margin-bottom:6px}
+.bn-prev h4{margin:0 0 4px;font-size:15px}
+.bn-prev p{margin:0;font-size:11.5px;opacity:.92}
+.loading{position:fixed;inset:0;background:rgba(255,255,255,.9);display:none;align-items:center;justify-content:center;z-index:1000;flex-direction:column;gap:12px}
+.loading.on{display:flex}
+.spinner{width:44px;height:44px;border:4px solid #e0e3ee;border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading p{font-size:13px;color:var(--brand);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading"><div class="spinner"></div><p id="loadingText">ခဏစောင့်ပါ...</p></div>
+
+<div id="authScreen" style="display:none">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="mark">🏪</div>
+      <h1>THAN ZAW HTUT Shop</h1>
+      <p>ဈေးဝယ်စနစ် — ဝင်ရောက်ပါ</p>
+    </div>
+    <div class="field"><label>Username <span class="req">*</span></label>
+      <input id="liUser" placeholder="Username ထည့်ပါ" autocomplete="off">
+      <div class="msgerr" id="liUserErr"></div>
+    </div>
+    <div class="field"><label>Password <span class="req">*</span></label>
+      <div class="pw-wrap"><input id="liPass" type="password" placeholder="Password ထည့်ပါ" autocomplete="off"><button class="pw-toggle" type="button" onclick="togglePw('liPass',this)">👁️</button></div>
+      <div class="msgerr" id="liPassErr"></div>
+    </div>
+    <button class="btn primary" id="loginBtn" onclick="doLogin()">🔓 ဝင်ရောက်မည်</button>
+    <div class="info-box" style="margin-top:14px;margin-bottom:0">📶 Internet ချိတ်ဆက်ထားရန် လိုအပ်ပါသည်</div>
+  </div>
+</div>
+
+<div id="appScreen">
+  <header id="hdr"></header>
+  <main id="main"></main>
+  <nav id="tabbar"></nav>
+</div>
+
+<div id="modal" class="modal-back" onclick="if(event.target===this)closeModal()"></div>
+
+<script type="module">
+/* ============ FIREBASE ============ */
+import { initializeApp, deleteApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getStorage, ref as sRef, uploadString, getDownloadURL }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBFGBy1abPr-ToQyQHgXWMXnpCvE983SE",
+  authDomain: "than-zaw-htut.firebaseapp.com",
+  projectId: "than-zaw-htut",
+  storageBucket: "than-zaw-htut.firebasestorage.app",
+  messagingSenderId: "222228536756",
+  appId: "1:222228536756:web:c44f9069ae1dd3b6fba6e1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+const EMAIL_DOMAIN = '@tzhshop.local';
+
+/* ============ Helpers ============ */
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Math.random().toString(36).slice(2,9);
+const mmk = n => Number(n||0).toLocaleString('en-US');
+const fmtDate = t => { const d = new Date(t); const p = n => String(n).padStart(2,'0'); return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`; };
+const digitsOnly = s => String(s||'').replace(/\D/g,'');
+const ADMIN_VIBER = 'https://viber.me/959772586243';
+const BANNER_COLORS = [
+  ['linear-gradient(135deg,#4f46e5,#06b6d4)','Indigo ➜ Cyan'],
+  ['linear-gradient(135deg,#f59e0b,#ef4444)','Amber ➜ Red'],
+  ['linear-gradient(135deg,#16a34a,#06b6d4)','Green ➜ Cyan'],
+  ['linear-gradient(135deg,#7c3aed,#ec4899)','Purple ➜ Pink'],
+  ['linear-gradient(135deg,#0f172a,#4f46e5)','Dark ➜ Indigo'],
+  ['linear-gradient(135deg,#dc2626,#f59e0b)','Red ➜ Amber']
+];
+const DEFAULT_MMQR = {
+  active: 'qr1',
+  qr1: { name: 'DAW KHIN KHIN GYI', payload: '00020101021126480015com.mmqrpay.www011522374300030812602060000005204599953031045802MM5917DAW KHIN KHIN GYI6008Hinthada6105100616213020910017638164350002MY0114ဒေါ်ခင်ခင်ကြီး0207ဟင်္သာတ630475F4' },
+  qr2: { name: 'HTAY', payload: '00020101021126480015com.mmqrpay.www011522374300092920902060000005204549953031045802MM5904HTAY6008Hinthada6105100616213020930030415164240002MY0103ဌေး0207ဟင်္သာတ6304B4AD' }
+};
+
+let DB = { users:[], products:[], orders:[], campaigns:[], banners:[], announcements:[], settings: { mmqr: JSON.parse(JSON.stringify(DEFAULT_MMQR)) } };
+let currentUser = null;
+let authUser = null;
+let unsubscribers = [];
+let state = { role:'user', view:'shop', adminTab:'pending', cat:'all', q:'', bannerIdx:0, cart:[], userSearch:'' };
+let uploadedReceiptData = '';
+let announceTimer = null;
+let currentRef = '';
+
+function showLoading(text){ document.getElementById('loadingText').textContent = text || 'ခဏစောင့်ပါ...'; document.getElementById('loading').classList.add('on'); }
+function hideLoading(){ document.getElementById('loading').classList.remove('on'); }
+function showModal(html){ if(announceTimer){ clearInterval(announceTimer); announceTimer = null; } const m = document.getElementById('modal'); m.innerHTML = `<div class="sheet">${html}</div>`; m.classList.add('on'); }
+function closeModal(){ if(announceTimer){ clearInterval(announceTimer); announceTimer = null; } const m = document.getElementById('modal'); m.classList.remove('on'); m.innerHTML = ''; }
+function toast(msg){ const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2500); }
+
+/* ============ MMQR Generator ============ */
+function crc16ccitt(bytes){
+  let crc = 0xFFFF;
+  for(let i = 0; i < bytes.length; i++){
+    crc ^= (bytes[i] << 8);
+    for(let j = 0; j < 8; j++){
+      if((crc & 0x8000) !== 0) crc = ((crc << 1) ^ 0x1021) & 0xFFFF;
+      else crc = (crc << 1) & 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+function cleanPayloadBase(payload){
+  let result = ''; let i = 0;
+  while(i < payload.length - 3){
+    let tag = payload.substring(i, i + 2);
+    let len = parseInt(payload.substring(i + 2, i + 4), 10);
+    if(isNaN(len) || i + 4 + len > payload.length){ result += payload.substring(i); break; }
+    if(tag === '54' || tag === '63'){ i += 4 + len; continue; }
+    result += payload.substring(i, i + 4 + len); i += 4 + len;
+  }
+  if(i < payload.length){ let rem = payload.substring(i); if(!rem.startsWith('6304')) result += rem; }
+  return result;
+}
+function generateDynamicPayload(staticPayload, amount){
+  let baseStr = (staticPayload || '').trim();
+  if(!baseStr) return '';
+  baseStr = cleanPayloadBase(baseStr);
+  if(baseStr.includes('010211')) baseStr = baseStr.replace('010211', '010212');
+  else if(!baseStr.includes('010212')) baseStr = '000201010212' + baseStr.substring(12);
+  if(amount && Number(amount) > 0){
+    let amtStr = Math.round(Number(amount)).toString();
+    let lenStr = amtStr.length.toString().padStart(2, '0');
+    baseStr += '54' + lenStr + amtStr;
+  }
+  let rawPayload = baseStr + '6304';
+  return rawPayload + crc16ccitt(new TextEncoder().encode(rawPayload));
+}
+function getActiveMMQR(){ const m = DB.settings.mmqr || DEFAULT_MMQR; return m[m.active || 'qr1'] || m.qr1; }
+function qrImageURL(text, size){ size = size || 280; return 'https://api.qrserver.com/v1/create-qr-code/?size=' + size + 'x' + size + '&data=' + encodeURIComponent(text); }
+
+/* ============ Auth ============ */
+function togglePw(id, btn){ const el = document.getElementById(id); if(!el) return; if(el.type === 'password'){ el.type = 'text'; btn.textContent = '🙈'; } else { el.type = 'password'; btn.textContent = '👁️'; } }
+async function doLogin(){
+  const u = document.getElementById('liUser').value.trim().toLowerCase();
+  const p = document.getElementById('liPass').value;
+  const uErr = document.getElementById('liUserErr'), pErr = document.getElementById('liPassErr');
+  uErr.classList.remove('show'); pErr.classList.remove('show');
+  if(!u){ uErr.textContent = 'Username ထည့်ပါ'; uErr.classList.add('show'); return; }
+  if(!p){ pErr.textContent = 'Password ထည့်ပါ'; pErr.classList.add('show'); return; }
+  if(!navigator.onLine){ toast('📶 Internet မရပါ'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = '⏳ စစ်ဆေးနေသည်...';
+  showLoading('Login စစ်ဆေးနေသည်...');
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, u + EMAIL_DOMAIN, p);
+    const userDoc = await getDoc(doc(db, 'users', userCred.user.uid));
+    if(!userDoc.exists()){ await signOut(auth); throw new Error('User data မတွေ့ပါ'); }
+    const uData = userDoc.data();
+    if(uData.status === 'suspended'){ await signOut(auth); throw new Error('ဤအကောင့်ကို ပိတ်ထားပါသည်'); }
+    currentUser = { uid: userCred.user.uid, ...uData };
+    hideLoading(); await enterApp();
+    toast('👋 ကြိုဆိုပါတယ် ' + (uData.fullname || uData.username));
+  } catch(e){
+    hideLoading();
+    let msg = e.message || 'Login မရပါ';
+    if(msg.includes('invalid-credential') || msg.includes('wrong-password') || msg.includes('user-not-found') || msg.includes('invalid-email')) msg = 'Username သို့မဟုတ် Password မှားနေပါသည်';
+    if(msg.includes('network')) msg = '📶 Internet မရပါ';
+    pErr.textContent = msg; pErr.classList.add('show');
+  } finally { btn.disabled = false; btn.textContent = '🔓 ဝင်ရောက်မည်'; }
+}
+async function doLogout(){
+  if(!confirm('Logout လုပ်မှာ သေချာပါသလား?')) return;
+  detachListeners();
+  try { await signOut(auth); } catch(e){}
+  currentUser = null; authUser = null; state.cart = [];
+  DB = { users:[], products:[], orders:[], campaigns:[], banners:[], announcements:[], settings: { mmqr: JSON.parse(JSON.stringify(DEFAULT_MMQR)) } };
+  document.getElementById('appScreen').classList.remove('on');
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('liUser').value = ''; document.getElementById('liPass').value = '';
+  toast('👋 Logout ပြီးပါပြီ');
+}
+
+/* ============ Listeners ============ */
+function detachListeners(){ unsubscribers.forEach(fn => { try { fn(); } catch(e){} }); unsubscribers = []; }
+function attachListeners(){
+  detachListeners();
+  unsubscribers.push(onSnapshot(collection(db, 'products'), snap => { DB.products = snap.docs.map(d => ({ id: d.id, ...d.data() })); if(currentUser) render(); }, e => console.warn(e.message)));
+  unsubscribers.push(onSnapshot(collection(db, 'orders'), snap => { DB.orders = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (b.createdAt||0) - (a.createdAt||0)); if(currentUser) render(); }, e => console.warn(e.message)));
+  unsubscribers.push(onSnapshot(collection(db, 'users'), snap => { DB.users = snap.docs.map(d => ({ id: d.id, ...d.data() })); if(currentUser) render(); }, e => console.warn(e.message)));
+  unsubscribers.push(onSnapshot(collection(db, 'campaigns'), snap => { DB.campaigns = snap.docs.map(d => ({ id: d.id, ...d.data() })); if(currentUser) render(); }, e => console.warn(e.message)));
+  unsubscribers.push(onSnapshot(collection(db, 'banners'), snap => { DB.banners = snap.docs.map(d => ({ id: d.id, ...d.data() })); if(currentUser) render(); }, e => console.warn(e.message)));
+  unsubscribers.push(onSnapshot(collection(db, 'announcements'), snap => { DB.announcements = snap.docs.map(d => ({ id: d.id, ...d.data() })); if(currentUser) render(); }, e => console.warn(e.message)));
+  unsubscribers.push(onSnapshot(doc(db, 'settings', 'mmqr'), snap => { if(snap.exists()) DB.settings.mmqr = snap.data(); if(currentUser) render(); }, e => console.warn(e.message)));
+}
+async function enterApp(){
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('appScreen').classList.add('on');
+  state.role = 'user'; state.view = 'shop'; state.adminTab = 'pending'; state.cart = [];
+  attachListeners(); render(); window.scrollTo(0,0);
+  setTimeout(showAnnouncement, 800);
+}
+function showAnnouncement(){
+  const list = (DB.announcements || []).filter(a => a.active);
+  if(!list.length) return;
+  const a = list[0]; let count = 10;
+  showModal(`<div style="text-align:center"><div style="font-size:42px;margin-bottom:4px">📢</div><h3 style="justify-content:center;margin-bottom:10px">${esc(a.title)}</h3></div><div class="ann-body">${esc(a.message)}</div><button class="btn primary" onclick="closeModal()">✅ ဖတ်ပြီးပါပြီ ( <span id="annCount">10</span> )</button>`);
+  if(announceTimer) clearInterval(announceTimer);
+  announceTimer = setInterval(() => { count--; const el = document.getElementById('annCount'); if(el) el.textContent = count; if(count <= 0) closeModal(); }, 1000);
+}
+
+/* ============ Business ============ */
+function campaignOf(p){ return DB.campaigns.find(c => c.id === p.campaignId && c.active) || null; }
+function priceOf(p){
+  const c = campaignOf(p);
+  if(!c) return { price:p.price, old:null, percent:0 };
+  const np = Math.round(p.price * (100 - c.percent) / 100);
+  return { price:np, old:p.price, percent:c.percent };
+}
+function cartTotals(){
+  let subtotal = 0, discount = 0, count = 0;
+  state.cart.forEach(it => { const p = DB.products.find(x => x.id === it.productId); if(!p) return; const pr = priceOf(p); const base = pr.old ? pr.old : pr.price; subtotal += base * it.qty; discount += (base - pr.price) * it.qty; count += it.qty; });
+  return { subtotal, discount, total: subtotal - discount, count };
+}
+function filterProducts(){ return DB.products.filter(p => (state.cat === 'all' || p.cat === state.cat) && p.name.toLowerCase().includes(state.q.toLowerCase())); }
+function allCategories(){ return [...new Set(DB.products.map(p => p.cat))].sort(); }
+
+function setRole(r){ if(r === 'admin' && (!currentUser || currentUser.role !== 'admin')){ toast('⛔ Admin သာ'); return; } state.role = r; state.view = 'shop'; state.adminTab = 'pending'; render(); window.scrollTo(0,0); }
+function setView(v){ state.view = v; render(); window.scrollTo(0,0); }
+function setAdminTab(t){ state.adminTab = t; render(); }
+function setCat(c){ state.cat = c; render(); }
+function setBanner(i){ state.bannerIdx = i; renderBanners(); }
+function onSearch(v){ state.q = v; renderGrid(); }
+function onUserSearch(v){ state.userSearch = v; render(); }
+function addToCart(id){
+  const p = DB.products.find(x => x.id === id);
+  if(!p || p.stock <= 0) return toast('လက်ကျန် မရှိပါ');
+  const it = state.cart.find(i => i.productId === id);
+  if(it){ if(it.qty + 1 > p.stock) return toast('လက်ကျန် မလုံလောက်ပါ'); it.qty++; } else state.cart.push({ productId:id, qty:1 });
+  toast('🛒 ထည့်ပြီးပါပြီ'); render();
+}
+function changeQty(id, d){
+  const it = state.cart.find(i => i.productId === id);
+  const p = DB.products.find(x => x.id === id);
+  if(!it || !p) return;
+  it.qty += d;
+  if(it.qty <= 0) state.cart = state.cart.filter(i => i.productId !== id);
+  else if(it.qty > p.stock) it.qty = p.stock;
+  render();
+}
+function removeItem(id){ state.cart = state.cart.filter(i => i.productId !== id); render(); }
+
+/* ============ Checkout ============ */
+function openPay(){
+  const t = cartTotals();
+  if(!state.cart.length) return toast('ဈေးခြင်းတောင်း ဗလာ');
+  const chk = document.getElementById('confirmCheck');
+  if(chk && !chk.checked) return toast('စာရင်းမှန်ကြောင်း အရင်စစ်ပါ');
+  currentRef = 'MMQR' + Math.random().toString(36).slice(2,8).toUpperCase();
+  const activeQr = getActiveMMQR();
+  const qrUrl = qrImageURL(generateDynamicPayload(activeQr.payload, t.total), 280);
+  uploadedReceiptData = '';
+  showModal(`
+    <button class="close" onclick="closeModal()">✕</button>
+    <h3>📱 MMQR ဖြင့် ငွေချေပြီး ပြေစာတင်ရန်</h3>
+    <div class="qrwrap"><img src="${qrUrl}" alt="QR"><div class="qramt">${mmk(t.total)} ကျပ်</div><div class="qrhint">KBZPay / MMQR App နဲ့ Scan ဖတ်ပြီး ငွေလွှဲပါ</div></div>
+    <div class="notice"><b>ချေရမည့်အချက်အလက်</b><br>• Merchant : <b>${esc(activeQr.name)}</b><br>• Ref No : <span class="ref">${currentRef}</span><br>• ပမာဏ : <b>${mmk(t.total)} ကျပ်</b></div>
+    <div class="field"><label>ငွေလွှဲပြေစာ (Receipt) ပုံ တင်ရန် <span class="req">*</span></label><input type="file" id="receiptFileImg" accept="image/*" onchange="handleReceiptUpload(this)"><div id="receiptPreviewContainer" style="margin-top:8px;text-align:center"></div></div>
+    <button class="btn primary" id="submitOrderBtn" disabled onclick="confirmPay()">✅ ပြေစာတင်ပြီး အော်ဒါအတည်ပြုမည်</button>
+    <div style="height:8px"></div><button class="btn ghost" onclick="closeModal()">မလုပ်တော့ပါ</button>
+  `);
+}
+async function handleReceiptUpload(input){
+  const file = input.files[0]; if(!file) return;
+  const compressed = await compressImage(file, 800, 0.7);
+  uploadedReceiptData = compressed;
+  const box = document.getElementById('receiptPreviewContainer');
+  if(box) box.innerHTML = `<img src="${compressed}" style="max-height:140px;border-radius:10px;border:1px solid var(--line);padding:4px">`;
+  const btn = document.getElementById('submitOrderBtn'); if(btn) btn.disabled = false;
+}
+function compressImage(file, maxW, quality){
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        if(w > maxW){ h = Math.round(h * maxW / w); w = maxW; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+async function confirmPay(){
+  if(!uploadedReceiptData){ toast('ကျေးဇူးပြု၍ ပြေစာပုံ တင်ပါ'); return; }
+  if(!navigator.onLine){ toast('📶 Internet မရပါ'); return; }
+  const btn = document.getElementById('submitOrderBtn');
+  btn.disabled = true; btn.textContent = '⏳ တင်နေသည်...';
+  showLoading('ပြေစာ တင်နေသည်...');
+  try {
+    const orderId = 'ORD' + Date.now().toString().slice(-7);
+    const path = `receipts/${currentUser.uid}/${orderId}_${Date.now()}.jpg`;
+    const ref = sRef(storage, path);
+    await uploadString(ref, uploadedReceiptData, 'data_url');
+    const downloadUrl = await getDownloadURL(ref);
+    const t = cartTotals();
+    const items = state.cart.map(it => { const p = DB.products.find(x => x.id === it.productId); const pr = priceOf(p); return { id:p.id, name:p.name, icon:p.icon, qty:it.qty, price:pr.price }; });
+    await addDoc(collection(db, 'orders'), { id: orderId, userId: currentUser.uid, user: currentUser.username, items, subtotal: t.subtotal, discount: t.discount, total: t.total, status: 'pending', createdAt: Date.now(), ref: currentRef, receiptUrl: downloadUrl, receiptPath: path });
+    state.cart = []; hideLoading(); closeModal(); toast('✅ အော်ဒါ တင်ပြီးပါပြီ'); setView('orders');
+  } catch(e){ hideLoading(); btn.disabled = false; btn.textContent = '✅ ပြေစာတင်ပြီး အော်ဒါအတည်ပြုမည်'; toast('❌ Error: ' + e.message); }
+}
+
+/* ============ User Views ============ */
+function prodCard(p){
+  const pr = priceOf(p); const inCart = state.cart.find(i => i.productId === p.id); const out = p.stock <= 0;
+  return `<div class="pcard ${out ? 'out' : ''}"><div class="pimg">${p.icon || '📦'}${pr.percent ? `<span class="badge disc">-${pr.percent}%</span>` : ''}${out ? `<span class="badge outb">ကုန်ဆုံး</span>` : ''}</div><div class="pbody"><div class="pname">${esc(p.name)}</div><div class="pcat">${esc(p.cat)}</div><div class="pprice">${pr.old ? `<s>${mmk(pr.old)}</s> ` : ''}<b>${mmk(pr.price)}</b> <small>ကျပ်</small></div><div class="pstock">လက်ကျန် ${p.stock}</div><button class="btn add" ${out ? 'disabled' : ''} onclick="addToCart('${p.id}')">${inCart ? `✔ ${inCart.qty}` : '🛒 ထည့်'}</button></div></div>`;
+}
+function renderGrid(){ const g = document.getElementById('pgrid'); if(!g) return; const list = filterProducts(); g.innerHTML = list.length ? list.map(prodCard).join('') : `<div class="empty" style="grid-column:1/-1">🔍 မတွေ့ပါ</div>`; }
+function renderBanners(){
+  const box = document.getElementById('bannerBox'); if(!box) return;
+  const bs = DB.banners.filter(b => b.active); if(!bs.length){ box.innerHTML = ''; return; }
+  const i = state.bannerIdx % bs.length; const b = bs[i];
+  box.innerHTML = `<div class="banner" style="background:${b.color}"><span class="banner-tag">${esc(b.tag || '')}</span><h3>${esc(b.title)}</h3><p>${esc(b.sub || '')}</p><div class="dots">${bs.map((_, k) => `<span class="dot ${k === i ? 'on' : ''}" onclick="setBanner(${k})"></span>`).join('')}</div></div>`;
+}
+function viewShop(){
+  const cats = ['all', ...allCategories()]; const list = filterProducts();
+  return `<div id="bannerBox"></div><div class="searchbar"><input placeholder="🔍 ရှာရန်..." value="${esc(state.q)}" oninput="onSearch(this.value)"></div><div class="chips">${cats.map(c => `<button class="chip ${state.cat === c ? 'on' : ''}" onclick="setCat('${esc(c)}')">${c === 'all' ? 'အားလုံး' : esc(c)}</button>`).join('')}</div><div class="grid" id="pgrid">${list.length ? list.map(prodCard).join('') : `<div class="empty" style="grid-column:1/-1">မတွေ့ပါ</div>`}</div>`;
+}
+function viewCart(){
+  if(!state.cart.length) return `<div class="card"><div class="empty big">🛒<br><br>ဗလာဖြစ်နေသည်<br><button class="btn primary sm" style="margin-top:14px" onclick="setView('shop')">ဈေးဝယ်ရန်</button></div></div>`;
+  const t = cartTotals();
+  return `<div class="card"><h3>🛒 ခြင်းတောင်း <span class="r">${t.count}</span></h3>${state.cart.map(it => { const p = DB.products.find(x => x.id === it.productId); if(!p) return ''; const pr = priceOf(p); return `<div class="citem"><div class="cicon">${p.icon}</div><div class="cinfo"><b>${esc(p.name)}</b><span>${mmk(pr.price)} ကျပ်</span></div><div class="qty"><button onclick="changeQty('${p.id}',-1)">−</button><b>${it.qty}</b><button onclick="changeQty('${p.id}',1)">+</button></div><button class="btn bad sm" onclick="removeItem('${p.id}')">🗑️</button></div>`; }).join('')}</div><div class="card"><h3>💰 ငွေတွက်ချက်</h3><div class="sumrow"><span>စုစုပေါင်း</span><span>${mmk(t.subtotal)} ကျပ်</span></div><div class="sumrow"><span>လျှော့စျေး</span><span style="color:var(--bad)">− ${mmk(t.discount)} ကျပ်</span></div><div class="sumrow total"><span>ကျသင့်</span><span>${mmk(t.total)} ကျပ်</span></div><label class="checkrow" for="confirmCheck"><input type="checkbox" id="confirmCheck" onchange="document.getElementById('payBtn').disabled = !this.checked"><span>စာရင်းမှန်ကန်ကြောင်း အမှန်ခြစ် စစ်ပြီးပါပြီ<small>ပစ္စည်းအမည်၊ အရေအတွက်၊ ငွေပမာဏ စစ်ပါ</small></span></label><button class="btn primary" id="payBtn" disabled onclick="openPay()">📱 MMQR နဲ့ ချေမည် & ပြေစာတင်မည်</button></div>`;
+}
+function orderCard(o, admin){
+  const stLabel = { pending:'⏳ စောင့်ဆိုင်းဆဲ', approved:'✅ အတည်ပြုပြီး', rejected:'❌ ပယ်ဖျက်' }[o.status] || o.status;
+  const receiptUrl = o.receiptUrl || o.receiptImg || '';
+  const oid = o.id || o.docId || '';
+  return `<div class="ocard"><div class="ohead"><span class="oid">${esc(oid)}</span><span class="st ${o.status}">${stLabel}</span><span class="odate">${fmtDate(o.createdAt)}</span></div><div class="oitems">${admin ? `<div><b>ဝယ်သူ:</b> @${esc(o.user)}</div>` : ''}${o.items.map(i => `• ${i.icon || ''} ${esc(i.name)} × ${i.qty} — ${mmk(i.price * i.qty)} ကျပ်`).join('<br>')}</div>${receiptUrl ? `<div><img src="${receiptUrl}" class="receipt-thumb" onclick="previewReceipt('${oid}')" alt="Receipt"></div>` : ''}<div class="ofoot"><span class="amt">${mmk(o.total)} ကျပ်</span><span class="ref">${esc(o.ref || '')}</span>${admin && o.status === 'pending' ? `<button class="btn ok sm" onclick="approveOrder('${oid}')">✅ Approve</button><button class="btn bad sm" onclick="rejectOrder('${oid}')">✕ ပယ်</button>` : ''}</div></div>`;
+}
+function previewReceipt(id){
+  const o = DB.orders.find(x => x.id === id); if(!o) return;
+  const url = o.receiptUrl || o.receiptImg; if(!url) return;
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>🧾 ငွေလွှဲပြေစာ (${esc(id)})</h3><div style="text-align:center;padding:10px 0"><img src="${url}" style="max-width:100%;max-height:70vh;border-radius:12px;border:1px solid var(--line);background:#fff"></div><button class="btn ghost" onclick="closeModal()">ပိတ်မည်</button>`);
+}
+function viewOrders(){
+  const list = DB.orders.filter(o => !currentUser || o.userId === currentUser.uid).slice().sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+  return `<div class="card"><h3>🧾 မှတ်တမ်း <span class="r">${list.length}</span></h3>${list.length ? list.map(o => orderCard(o, false)).join('') : `<div class="empty">မှတ်တမ်း မရှိ</div>`}</div>`;
+}
+
+/* ============ Admin Orders ============ */
+async function approveOrder(id){
+  const o = DB.orders.find(x => x.id === id); if(!o || o.status !== 'pending') return;
+  if(!navigator.onLine) return toast('📶 Internet မရပါ');
+  showLoading('Approve လုပ်နေသည်...');
+  try {
+    for(const it of o.items){ const p = DB.products.find(x => x.id === it.id); if(p) await updateDoc(doc(db, 'products', p.id), { stock: Math.max(0, p.stock - it.qty) }); }
+    await updateDoc(doc(db, 'orders', o.docId || o.id), { status: 'approved', approvedAt: Date.now() });
+    hideLoading(); toast('✅ အတည်ပြုပြီး');
+  } catch(e){ hideLoading(); toast('❌ ' + e.message); }
+}
+async function rejectOrder(id){
+  const o = DB.orders.find(x => x.id === id); if(!o || o.status !== 'pending') return;
+  const r = prompt('ပယ်ဖျက်ရသည့် အကြောင်းရင်း:', 'ငွေလွှဲပြေစာ မမှန်ကန်ပါ'); if(r === null) return;
+  try { await updateDoc(doc(db, 'orders', o.docId || o.id), { status: 'rejected', rejectReason: r, rejectedAt: Date.now() }); toast('❌ ပယ်ဖျက်လိုက်ပါပြီ'); } catch(e){ toast('❌ ' + e.message); }
+}
+function adminPending(){
+  const os = DB.orders.filter(o => o.status === 'pending').sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+  return `<div class="card"><h3>🕒 အတည်ပြုရန် <span class="r">${os.length}</span></h3>${os.length ? os.map(o => orderCard(o, true)).join('') : `<div class="empty">🎉 စစ်ဆေးရန် မရှိပါ</div>`}</div>`;
+}
+
+/* ============ Admin Banners ============ */
+function adminBanners(){
+  const list = DB.banners;
+  return `<div class="card"><h3>🖼️ Banner စီမံ <span class="r">${list.length}</span></h3><div class="notice">Banner များသည် User ၏ ဈေးဝယ်စာမျက်နှာတွင် အလှည့်ကျ ပေါ်ပါမည်။</div><button class="btn primary" onclick="openBannerEdit('')">➕ Banner အသစ်</button><div style="height:12px"></div>${list.length ? list.map(b => `<div class="arow"><div class="thumb" style="background:${b.color};color:#fff;font-size:10px;font-weight:800">${b.active ? 'ON' : 'OFF'}</div><div class="n">${esc(b.title)}<small>${esc(b.tag || '—')} • ${esc(b.sub || '')}</small></div><button class="btn ghost sm" onclick="openBannerEdit('${b.id}')">✏️</button><button class="btn ${b.active ? 'bad' : 'ok'} sm" onclick="toggleBanner('${b.id}')">${b.active ? '⏸️' : '▶️'}</button><button class="btn bad sm" onclick="deleteBanner('${b.id}')">🗑️</button></div>`).join('') : `<div class="empty">Banner မရှိပါ</div>`}</div>`;
+}
+function openBannerEdit(id){
+  const b = id ? DB.banners.find(x => x.id === id) : null; const isEdit = !!b;
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>${isEdit ? '✏️ Banner ပြင်' : '➕ Banner အသစ်'}</h3><div class="field"><label>Tag</label><input id="bnTag" value="${isEdit ? esc(b.tag || '') : ''}"></div><div class="field"><label>ခေါင်းစဉ် <span class="req">*</span></label><input id="bnTitle" value="${isEdit ? esc(b.title) : ''}"></div><div class="field"><label>ဖော်ပြချက်</label><input id="bnSub" value="${isEdit ? esc(b.sub || '') : ''}"></div><div class="field"><label>အရောင်</label><select id="bnColor">${BANNER_COLORS.map(([c,n]) => `<option value="${c}" ${isEdit && b.color === c ? 'selected' : ''}>${n}</option>`).join('')}</select></div><div id="bnPreview"></div><label class="cbox" for="bnActive"><input type="checkbox" id="bnActive" ${(!isEdit || b.active) ? 'checked' : ''}><span>✅ Active</span></label><button class="btn primary" onclick="saveBannerEdit('${isEdit ? b.id : ''}')">💾 သိမ်း</button>`);
+  setTimeout(bnLivePreview, 50);
+}
+function bnLivePreview(){
+  const box = document.getElementById('bnPreview'); if(!box) return;
+  const tag = (document.getElementById('bnTag')||{}).value||''; const title = (document.getElementById('bnTitle')||{}).value||'';
+  const sub = (document.getElementById('bnSub')||{}).value||''; const color = (document.getElementById('bnColor')||{}).value||BANNER_COLORS[0][0];
+  box.innerHTML = `<div class="bn-prev" style="background:${color}">${tag ? `<span class="t">${esc(tag)}</span>` : ''}<h4>${esc(title || 'ခေါင်းစဉ်')}</h4><p>${esc(sub)}</p></div>`;
+}
+async function saveBannerEdit(id){
+  const tag = document.getElementById('bnTag').value.trim(); const title = document.getElementById('bnTitle').value.trim();
+  const sub = document.getElementById('bnSub').value.trim(); const color = document.getElementById('bnColor').value;
+  const active = document.getElementById('bnActive').checked;
+  if(!title){ toast('ခေါင်းစဉ် ထည့်ပါ'); return; }
+  try {
+    if(id) await updateDoc(doc(db, 'banners', id), { tag, title, sub, color, active });
+    else await addDoc(collection(db, 'banners'), { tag, title, sub, color, active, createdAt: Date.now() });
+    closeModal(); toast('💾 သိမ်းပြီး');
+  } catch(e){ toast('❌ ' + e.message); }
+}
+async function toggleBanner(id){ const b = DB.banners.find(x => x.id === id); if(!b) return; try { await updateDoc(doc(db, 'banners', id), { active: !b.active }); toast('✅'); } catch(e){ toast('❌ ' + e.message); } }
+async function deleteBanner(id){ if(!confirm('Banner ဖျက်မှာ သေချာပါသလား?')) return; try { await deleteDoc(doc(db, 'banners', id)); toast('🗑️ ဖျက်ပြီး'); } catch(e){ toast('❌ ' + e.message); } }
+
+/* ============ Admin Campaigns ============ */
+function adminCampaigns(){
+  const list = DB.campaigns;
+  return `<div class="card"><h3>🎯 ကမ်ပိန်း <span class="r">${list.length}</span></h3><div class="notice">ကမ်ပိန်းကို ပစ္စည်းများနှင့် ချိတ်ဆက်ရန် — <b>📦 ပစ္စည်း</b> tab မှ ရွေးပါ။</div><button class="btn primary" onclick="openCampaignEdit('')">➕ ကမ်ပိန်း အသစ်</button><div style="height:12px"></div>${list.length ? list.map(c => { const cnt = DB.products.filter(p => p.campaignId === c.id).length; return `<div class="arow"><div class="thumb" style="background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-weight:800;font-size:14px">${c.percent}%</div><div class="n">${esc(c.name)}<small>${c.active ? '✅ Active' : '⏸️ Inactive'} • ပစ္စည်း ${cnt}</small></div><button class="btn ghost sm" onclick="openCampaignEdit('${c.id}')">✏️</button><button class="btn ${c.active ? 'bad' : 'ok'} sm" onclick="toggleCampaign('${c.id}')">${c.active ? '⏸️' : '▶️'}</button><button class="btn bad sm" onclick="deleteCampaign('${c.id}')">🗑️</button></div>`; }).join('') : `<div class="empty">ကမ်ပိန်း မရှိပါ</div>`}</div>`;
+}
+function openCampaignEdit(id){
+  const c = id ? DB.campaigns.find(x => x.id === id) : null; const isEdit = !!c;
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>${isEdit ? '✏️ ကမ်ပိန်း ပြင်' : '➕ ကမ်ပိန်း အသစ်'}</h3><div class="field"><label>အမည် <span class="req">*</span></label><input id="cpName" value="${isEdit ? esc(c.name) : ''}"></div><div class="field"><label>လျှော့စျေး % <span class="req">*</span></label><input id="cpPercent" type="number" min="1" max="99" value="${isEdit ? c.percent : 10}"></div><label class="cbox" for="cpActive"><input type="checkbox" id="cpActive" ${(!isEdit || c.active) ? 'checked' : ''}><span>✅ Active</span></label><button class="btn primary" onclick="saveCampaignEdit('${isEdit ? c.id : ''}')">💾 သိမ်း</button>`);
+}
+async function saveCampaignEdit(id){
+  const name = document.getElementById('cpName').value.trim(); const percent = parseInt(document.getElementById('cpPercent').value, 10); const active = document.getElementById('cpActive').checked;
+  if(!name){ toast('အမည် ထည့်ပါ'); return; }
+  if(!percent || percent < 1 || percent > 99){ toast('၁-၉၉ ကြား'); return; }
+  try {
+    if(id) await updateDoc(doc(db, 'campaigns', id), { name, percent, active });
+    else await addDoc(collection(db, 'campaigns'), { name, percent, active, createdAt: Date.now() });
+    closeModal(); toast('💾 သိမ်းပြီး');
+  } catch(e){ toast('❌ ' + e.message); }
+}
+async function toggleCampaign(id){ const c = DB.campaigns.find(x => x.id === id); if(!c) return; try { await updateDoc(doc(db, 'campaigns', id), { active: !c.active }); toast('✅'); } catch(e){ toast('❌ ' + e.message); } }
+async function deleteCampaign(id){
+  if(!confirm('ကမ်ပိန်း ဖျက်မှာ သေချာပါသလား?')) return;
+  try { for(const p of DB.products.filter(p => p.campaignId === id)){ await updateDoc(doc(db, 'products', p.id), { campaignId: null }); } await deleteDoc(doc(db, 'campaigns', id)); toast('🗑️ ဖျက်ပြီး'); } catch(e){ toast('❌ ' + e.message); }
+}
+
+/* ============ Admin Announcements ============ */
+function adminAnnouncements(){
+  const list = DB.announcements || [];
+  return `<div class="card"><h3>📢 အသိပေးချက် <span class="r">${list.length}</span></h3><div class="notice">App ဖွင့်ချိန် <b>၁၀ စက္ကန့်</b> ပြသပါမည်။</div><button class="btn primary" onclick="openAnnEdit('')">➕ အသိပေးချက် အသစ်</button><div style="height:12px"></div>${list.length ? list.map(a => `<div class="arow"><div class="thumb" style="background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;font-size:20px">📢</div><div class="n">${esc(a.title)}<small>${a.active ? '✅' : '⏸️'} • ${esc((a.message||'').slice(0,40))}${(a.message||'').length>40?'…':''}</small></div><button class="btn ghost sm" onclick="previewAnn('${a.id}')">👁️</button><button class="btn ghost sm" onclick="openAnnEdit('${a.id}')">✏️</button><button class="btn ${a.active ? 'bad' : 'ok'} sm" onclick="toggleAnn('${a.id}')">${a.active ? '⏸️' : '▶️'}</button><button class="btn bad sm" onclick="deleteAnn('${a.id}')">🗑️</button></div>`).join('') : `<div class="empty">မရှိပါ</div>`}</div>`;
+}
+function openAnnEdit(id){
+  const a = id ? DB.announcements.find(x => x.id === id) : null; const isEdit = !!a;
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>${isEdit ? '✏️ ပြင်' : '➕ အသစ်'}</h3><div class="field"><label>ခေါင်းစဉ် <span class="req">*</span></label><input id="anTitle" value="${isEdit ? esc(a.title) : ''}"></div><div class="field"><label>အကြောင်းအရာ <span class="req">*</span></label><textarea id="anMsg" style="font-family:inherit;font-size:13px;min-height:130px">${isEdit ? esc(a.message) : ''}</textarea></div><label class="cbox" for="anActive"><input type="checkbox" id="anActive" ${(!isEdit || a.active) ? 'checked' : ''}><span>✅ Active</span></label><button class="btn primary" onclick="saveAnnEdit('${isEdit ? a.id : ''}')">💾 သိမ်း</button>`);
+}
+async function saveAnnEdit(id){
+  const title = document.getElementById('anTitle').value.trim(); const message = document.getElementById('anMsg').value.trim(); const active = document.getElementById('anActive').checked;
+  if(!title){ toast('ခေါင်းစဉ် ထည့်ပါ'); return; }
+  if(!message){ toast('အကြောင်းအရာ ထည့်ပါ'); return; }
+  try {
+    if(id) await updateDoc(doc(db, 'announcements', id), { title, message, active });
+    else await addDoc(collection(db, 'announcements'), { title, message, active, createdAt: Date.now() });
+    closeModal(); toast('💾 သိမ်းပြီး');
+  } catch(e){ toast('❌ ' + e.message); }
+}
+async function toggleAnn(id){ const a = DB.announcements.find(x => x.id === id); if(!a) return; try { await updateDoc(doc(db, 'announcements', id), { active: !a.active }); toast('✅'); } catch(e){ toast('❌ ' + e.message); } }
+async function deleteAnn(id){ if(!confirm('ဖျက်မှာ သေချာပါသလား?')) return; try { await deleteDoc(doc(db, 'announcements', id)); toast('🗑️'); } catch(e){ toast('❌ ' + e.message); } }
+function previewAnn(id){
+  const a = DB.announcements.find(x => x.id === id); if(!a) return;
+  showModal(`<button class="close" onclick="closeModal()">✕</button><div style="text-align:center"><div style="font-size:42px">📢</div><h3 style="justify-content:center">${esc(a.title)}</h3></div><div class="ann-body">${esc(a.message)}</div><button class="btn ghost" onclick="closeModal()">ပိတ်</button>`);
+}
+
+/* ============ Admin MMQR ============ */
+function adminMMQR(){
+  const m = DB.settings.mmqr; const activeKey = m.active || 'qr1'; const keys = ['qr1','qr2'];
+  const activeQr = m[activeKey]; const testPayload = generateDynamicPayload(activeQr.payload, 1000); const testUrl = qrImageURL(testPayload, 240);
+  return `<div class="card"><h3>💰 MMQR စနစ်</h3><div class="notice">User ငွေချေတဲ့အခါ <b>ငွေပမာဏ Auto ထည့်</b>ပြီး QR ထုတ်ပေးပါမယ်။</div>${keys.map(k => { const qr = m[k]; const isActive = activeKey === k; return `<div class="qrcard ${isActive ? 'on' : ''}"><div class="qh"><div class="qb">${k === 'qr1' ? '1' : '2'}</div><div class="qn">${esc(qr.name)}</div>${isActive ? '<span class="st approved">✅ Active</span>' : ''}</div><div class="qs">${esc(qr.payload)}</div><div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap"><button class="btn ghost sm" onclick="openMMQREdit('${k}')">✏️ ပြင်</button><button class="btn ghost sm" onclick="previewMMQR('${k}')">👁️ Test</button>${isActive ? `<button class="btn ok sm" disabled>✅ Active</button>` : `<button class="btn primary sm" onclick="setActiveMMQR('${k}')">✔ သုံးမည်</button>`}</div></div>`; }).join('')}</div><div class="card"><h3>🧪 Active QR — ၁,၀၀၀ ကျပ်</h3><div style="text-align:center;padding:8px 0"><img src="${testUrl}" style="width:240px;height:240px;border-radius:14px;border:1px solid var(--line);padding:8px;background:#fff"><div style="font-size:11.5px;color:var(--muted);margin-top:8px">${esc(activeQr.name)}</div><div style="font-size:10px;color:var(--muted);font-family:monospace;background:#f4f5fa;padding:10px;border-radius:8px;margin-top:12px;word-break:break-all;line-height:1.5;text-align:left;max-height:120px;overflow:auto"><b>Payload:</b><br>${esc(testPayload)}</div></div></div>`;
+}
+async function setActiveMMQR(k){ try { await setDoc(doc(db, 'settings', 'mmqr'), { ...DB.settings.mmqr, active: k }, { merge: true }); toast('✅ Active ပြောင်း'); } catch(e){ toast('❌ ' + e.message); } }
+function previewMMQR(k){
+  const qr = DB.settings.mmqr[k]; const testPayload = generateDynamicPayload(qr.payload, 1000);
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>👁️ ${esc(qr.name)}</h3><div class="qrwrap"><img src="${qrImageURL(testPayload, 260)}" style="width:260px;height:260px;border-radius:14px;border:1px solid var(--line);padding:8px;background:#fff"><div style="font-size:11.5px;color:var(--muted);margin-top:10px">၁,၀၀၀ ကျပ် နမူနာ</div></div>`);
+}
+function openMMQREdit(k){
+  const qr = DB.settings.mmqr[k];
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>✏️ MMQR ပြင်</h3><div class="field"><label>Merchant အမည်</label><input id="mmName" value="${esc(qr.name)}"></div><div class="field"><label>Static Payload</label><textarea id="mmPayload">${esc(qr.payload)}</textarea></div><button class="btn primary" onclick="saveMMQREdit('${k}')">💾 သိမ်း</button>`);
+}
+async function saveMMQREdit(k){
+  const name = document.getElementById('mmName').value.trim(); const payload = document.getElementById('mmPayload').value.trim();
+  if(!payload){ toast('Payload ထည့်ပါ'); return; }
+  try { const updated = { ...DB.settings.mmqr }; updated[k] = { name: name || ('QR ' + k), payload }; await setDoc(doc(db, 'settings', 'mmqr'), updated); closeModal(); toast('💾 သိမ်းပြီး'); } catch(e){ toast('❌ ' + e.message); }
+}
+
+/* ============ Users ============ */
+function openUserModal(userId){
+  const u = userId ? DB.users.find(x => x.id === userId) : null; const isEdit = !!u;
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>${isEdit ? '✏️ ပြင်' : '➕ User အသစ်'}</h3><div class="field"><label>Username *</label><input id="muUser" value="${isEdit ? esc(u.username) : ''}" ${isEdit ? 'disabled' : ''}></div><div class="field"><label>အမည် *</label><input id="muName" value="${isEdit ? esc(u.fullname) : ''}"></div><div class="field"><label>ဖုန်း (09 Auto) *</label><div class="phone-wrap"><div class="phone-prefix">09</div><input id="muPhone" type="tel" inputmode="numeric" maxlength="11" value="${isEdit ? (u.phone||'').replace(/^09/,'') : ''}"></div></div><div class="field"><label>${isEdit ? 'Password အသစ် (မပြောင်းရင် ဗလာ)' : 'Password *'}</label><input id="muPass" type="password"></div><div class="field"><label>Role</label><select id="muRole"><option value="user" ${isEdit && u.role==='user' ? 'selected' : ''}>👤 User</option><option value="admin" ${isEdit && u.role==='admin' ? 'selected' : ''}>🛠️ Admin</option></select></div><button class="btn primary" onclick="saveUser('${isEdit ? u.id : ''}')">${isEdit ? '💾 သိမ်း' : '➕ ဖန်တီး'}</button>`);
+}
+async function saveUser(userId){
+  const username = document.getElementById('muUser').value.trim().toLowerCase();
+  const fullname = document.getElementById('muName').value.trim();
+  const phoneDigits = digitsOnly(document.getElementById('muPhone').value);
+  const pass = document.getElementById('muPass').value;
+  const role = document.getElementById('muRole').value;
+  if(!userId && (!username || username.length < 3)){ toast('Username ၃ လုံးအနည်းဆုံး'); return; }
+  if(!fullname){ toast('အမည် ထည့်ပါ'); return; }
+  if(!phoneDigits || phoneDigits.length < 6 || phoneDigits.length > 11){ toast('ဖုန်း ၆-၁၁ လုံး'); return; }
+  if(!userId && (!pass || pass.length < 6)){ toast('Password ၆ လုံးအနည်းဆုံး'); return; }
+  if(!navigator.onLine){ toast('📶 Internet မရပါ'); return; }
+  if(!userId && DB.users.find(x => (x.username||'').toLowerCase() === username)){ toast('Username သုံးပြီးသား'); return; }
+  showLoading(userId ? 'Update လုပ်နေသည်...' : 'User ဖန်တီးနေသည်...');
+  try {
+    const fullPhone = '09' + phoneDigits;
+    if(userId){
+      await updateDoc(doc(db, 'users', userId), { fullname, phone: fullPhone, role });
+      hideLoading(); closeModal(); toast('💾 သိမ်းပြီး');
+    } else {
+      const secondaryApp = initializeApp(firebaseConfig, 'CreateUser_' + Date.now());
+      const secondaryAuth = getAuth(secondaryApp);
+      try {
+        const userCred = await createUserWithEmailAndPassword(secondaryAuth, username + EMAIL_DOMAIN, pass);
+        await setDoc(doc(db, 'users', userCred.user.uid), { username, fullname, phone: fullPhone, role, status: 'active', createdAt: Date.now() });
+        await signOut(secondaryAuth);
+      } finally { await deleteApp(secondaryApp); }
+      hideLoading(); closeModal(); toast('✅ User ဖန်တီးပြီး');
+    }
+  } catch(e){ hideLoading(); let msg = e.message; if(msg.includes('email-already-in-use')) msg = 'Username သုံးပြီးသား'; toast('❌ ' + msg); }
+}
+async function deleteUser(userId){
+  const u = DB.users.find(x => x.id === userId); if(!u) return;
+  if(currentUser && currentUser.uid === u.id){ toast('⛔ ကိုယ့်အကောင့်'); return; }
+  if(!confirm('ဖျက်မှာ သေချာပါသလား?')) return;
+  try { await deleteDoc(doc(db, 'users', userId)); toast('🗑️ ဖျက်ပြီး'); } catch(e){ toast('❌ ' + e.message); }
+}
+async function toggleUserStatus(userId){
+  const u = DB.users.find(x => x.id === userId); if(!u) return;
+  if(currentUser && currentUser.uid === u.id){ toast('⛔ ကိုယ့်အကောင့်'); return; }
+  try { const newStatus = u.status === 'active' ? 'suspended' : 'active'; await updateDoc(doc(db, 'users', userId), { status: newStatus }); toast(newStatus === 'active' ? '✅ ဖွင့်ပြီး' : '⛔ ပိတ်ပြီး'); } catch(e){ toast('❌ ' + e.message); }
+}
+function adminUsersView(){
+  const q = (state.userSearch||'').toLowerCase();
+  const list = DB.users.filter(u => !q || (u.username||'').toLowerCase().includes(q) || (u.id||'').toLowerCase().includes(q) || (u.fullname||'').toLowerCase().includes(q));
+  return `<div class="card"><h3>👥 အသုံးပြုသူ <span class="r">${DB.users.length}</span></h3><div class="searchbar"><input placeholder="🔍 ရှာရန်..." value="${esc(state.userSearch)}" oninput="onUserSearch(this.value)"></div><button class="btn primary" onclick="openUserModal('')">➕ User အသစ်</button><div style="height:14px"></div>${list.length ? list.map(u => { const isSelf = currentUser && currentUser.uid === u.id; const initial = (u.fullname || u.username || '?').charAt(0).toUpperCase(); const bg = u.role === 'admin' ? 'linear-gradient(135deg,#f59e0b,#ef4444)' : 'linear-gradient(135deg,#4f46e5,#06b6d4)'; return `<div class="ucard"><div class="av" style="background:${bg}">${esc(initial)}</div><div class="info"><b>${esc(u.fullname || u.username)} ${isSelf ? '(ကိုယ်)' : ''}</b><small><span class="roletag ${u.role}">${u.role === 'admin' ? '🛠️ Admin' : '👤 User'}</span>${u.status === 'suspended' ? '<span class="roletag suspended">⛔</span>' : ''}</small><small>@${esc(u.username)} • ${esc(u.phone || '')}</small></div><div class="acts"><button class="btn ghost sm" onclick="openUserModal('${u.id}')">✏️</button><button class="btn ${u.status === 'active' ? 'bad' : 'ok'} sm" onclick="toggleUserStatus('${u.id}')" ${isSelf ? 'disabled' : ''}>${u.status === 'active' ? '⛔' : '✅'}</button><button class="btn bad sm" onclick="deleteUser('${u.id}')" ${isSelf ? 'disabled' : ''}>🗑️</button></div></div>`; }).join('') : `<div class="empty">မတွေ့ပါ</div>`}</div>`;
+}
+
+/* ============ Admin Products ============ */
+function adminProducts(){
+  return `<div class="card"><h3>📦 ပစ္စည်း <span class="r">${DB.products.length}</span></h3><button class="btn primary" onclick="editProduct('')">➕ ပစ္စည်း အသစ်</button><div style="height:12px"></div>${DB.products.map(p => { const c = DB.campaigns.find(x => x.id === p.campaignId); return `<div class="arow"><div class="thumb">${p.icon}</div><div class="n">${esc(p.name)}<small>${esc(p.cat)} • လက်ကျန် ${p.stock} • ${mmk(p.price)} ကျပ်${c ? ' • 🎯 ' + esc(c.name) + ' (-' + c.percent + '%)' : ''}</small></div><button class="btn ghost sm" onclick="editProduct('${p.id}')">✏️</button><button class="btn bad sm" onclick="deleteProduct('${p.id}')">🗑️</button></div>`; }).join('') || `<div class="empty">ပစ္စည်း မရှိပါ</div>`}</div>`;
+}
+function editProduct(id){
+  const p = id ? DB.products.find(x => x.id === id) : null; const isEdit = !!p;
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>${isEdit ? '✏️ ပစ္စည်း ပြင်' : '➕ ပစ္စည်း အသစ်'}</h3><div class="field"><label>အမည် <span class="req">*</span></label><input id="epName" value="${isEdit ? esc(p.name) : ''}"></div><div class="field"><label>အမျိုးအစား</label><input id="epCat" value="${isEdit ? esc(p.cat) : ''}" placeholder="စားသောက်ကုန်"></div><div class="field"><label>Icon (Emoji)</label><input id="epIcon" value="${isEdit ? esc(p.icon || '📦') : '📦'}" maxlength="6"></div><div class="field"><label>ဈေး (ကျပ်) <span class="req">*</span></label><input id="epPrice" type="number" value="${isEdit ? p.price : 0}"></div><div class="field"><label>လက်ကျန်</label><input id="epStock" type="number" value="${isEdit ? p.stock : 0}"></div><div class="field"><label>ကမ်ပိန်း</label><select id="epCampaign"><option value="">— မရှိ —</option>${DB.campaigns.map(c => `<option value="${c.id}" ${isEdit && p.campaignId === c.id ? 'selected' : ''}>${esc(c.name)} (${c.percent}%)</option>`).join('')}</select></div><button class="btn primary" onclick="saveProductEdit('${isEdit ? p.id : ''}')">💾 သိမ်း</button>`);
+}
+async function saveProductEdit(id){
+  const name = document.getElementById('epName').value.trim(); const cat = document.getElementById('epCat').value.trim() || 'အခြား';
+  const icon = document.getElementById('epIcon').value.trim() || '📦'; const price = parseInt(document.getElementById('epPrice').value, 10) || 0;
+  const stock = parseInt(document.getElementById('epStock').value, 10) || 0; const campaignId = document.getElementById('epCampaign').value || null;
+  if(!name){ toast('အမည် ထည့်ပါ'); return; }
+  if(price <= 0){ toast('ဈေး ထည့်ပါ'); return; }
+  try {
+    if(id) await updateDoc(doc(db, 'products', id), { name, cat, icon, price, stock, campaignId });
+    else await addDoc(collection(db, 'products'), { name, cat, icon, price, stock, campaignId, createdAt: Date.now() });
+    closeModal(); toast('💾 သိမ်းပြီး');
+  } catch(e){ toast('❌ ' + e.message); }
+}
+async function deleteProduct(id){
+  const p = DB.products.find(x => x.id === id); if(!p) return;
+  if(!confirm(`"${p.name}" ဖျက်မှာ သေချာပါသလား?`)) return;
+  try { await deleteDoc(doc(db, 'products', id)); toast('🗑️ ဖျက်ပြီး'); } catch(e){ toast('❌ ' + e.message); }
+}
+
+/* ============ Admin Router ============ */
+function viewAdmin(){
+  const t = state.adminTab; const pendingCount = DB.orders.filter(o => o.status === 'pending').length;
+  let body = '';
+  if(t === 'pending') body = adminPending();
+  else if(t === 'users') body = adminUsersView();
+  else if(t === 'products') body = adminProducts();
+  else if(t === 'campaigns') body = adminCampaigns();
+  else if(t === 'banners') body = adminBanners();
+  else if(t === 'announcements') body = adminAnnouncements();
+  else if(t === 'mmqr') body = adminMMQR();
+  else body = adminPending();
+  return `<div class="chips" style="padding-bottom:12px">${[['pending', `🕒 အတည်ပြု ${pendingCount ? '('+pendingCount+')' : ''}`],['products','📦 ပစ္စည်း'],['campaigns','🎯 ကမ်ပိန်း'],['banners','🖼️ Banner'],['announcements','📢 အသိပေး'],['users','👥 User'],['mmqr','💰 MMQR']].map(([k,l]) => `<button class="chip ${t===k?'on':''}" onclick="setAdminTab('${k}')">${l}</button>`).join('')}</div>${body}`;
+}
+
+/* ============ Header / Tabs / Render ============ */
+function viberSVG(){ return `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/></svg>`; }
+function renderHeader(){
+  if(!currentUser) return;
+  const t = cartTotals(); const isAdmin = currentUser.role === 'admin'; const showCart = state.role === 'user';
+  const initial = (currentUser.fullname || currentUser.username || '?').charAt(0).toUpperCase();
+  document.getElementById('hdr').innerHTML = `<div class="hrow1"><div class="logo">THAN ZAW HTUT Shop<small>${state.role === 'admin' ? 'Admin' : 'ဈေးဝယ်'}</small></div><div class="spacer"></div><div class="user-chip" onclick="viewProfile()"><div class="av">${esc(initial)}</div><div class="un">${esc(currentUser.username)}</div></div>${showCart ? `<button class="cartbtn" onclick="setView('cart')">🛒${t.count ? `<span class="cnt">${t.count}</span>` : ''}</button>` : ''}</div><div class="hrow2"><div class="seg"><button class="${state.role==='user'?'on':''}" onclick="setRole('user')">👤 User</button>${isAdmin ? `<button class="${state.role==='admin'?'on':''}" onclick="setRole('admin')">🛠️ Admin</button>` : ''}</div><a class="viber-btn" href="${ADMIN_VIBER}" target="_blank">${viberSVG()}<div class="vib-info"><small>Admin ဆက်သွယ်ရန်</small></div></a></div>`;
+}
+function renderTabs(){
+  const el = document.getElementById('tabbar'); if(!currentUser){ el.innerHTML = ''; return; }
+  if(state.role === 'admin'){
+    el.className = 'scrollable'; const p = DB.orders.filter(o => o.status === 'pending').length;
+    el.innerHTML = [['pending','🕒','အတည်ပြု',p],['products','📦','ပစ္စည်း',0],['campaigns','🎯','ကမ်ပိန်း',0],['banners','🖼️','Banner',0],['announcements','📢','အသိပေး',0],['users','👥','User',0],['mmqr','💰','MMQR',0]].map(([k,ic,lb,badge]) => `<button class="${state.adminTab===k?'on':''}" onclick="setAdminTab('${k}')"><span class="ic">${ic}</span>${lb}${badge ? `<span class="cnt">${badge}</span>` : ''}</button>`).join('');
+  } else {
+    el.className = ''; const t = cartTotals();
+    el.innerHTML = [['shop','🏪','ဈေးဝယ်',0],['cart','🛒','ခြင်းတောင်း',t.count],['orders','🧾','မှတ်တမ်း',0]].map(([k,ic,lb,badge]) => `<button class="${state.view===k?'on':''}" onclick="setView('${k}')"><span class="ic">${ic}</span>${lb}${badge ? `<span class="cnt">${badge}</span>` : ''}</button>`).join('');
+  }
+}
+function render(){
+  if(!currentUser) return;
+  renderHeader(); const m = document.getElementById('main');
+  if(state.role === 'admin') m.innerHTML = viewAdmin();
+  else { m.innerHTML = { shop: viewShop, cart: viewCart, orders: viewOrders }[state.view](); if(state.view === 'shop') renderBanners(); }
+  renderTabs();
+}
+function viewProfile(){
+  if(!currentUser) return;
+  showModal(`<button class="close" onclick="closeModal()">✕</button><h3>👤 Profile</h3><div class="sumrow"><span>Username</span><b>${esc(currentUser.username)}</b></div><div class="sumrow"><span>အမည်</span><b>${esc(currentUser.fullname || '')}</b></div><div class="sumrow"><span>ဖုန်း</span><b>${esc(currentUser.phone || '')}</b></div><div class="sumrow"><span>Role</span><b>${currentUser.role === 'admin' ? '🛠️ Admin' : '👤 User'}</b></div><div style="height:14px"></div><button class="btn ghost" onclick="closeModal();showAnnouncement()">📢 အသိပေးချက်</button><div style="height:8px"></div><button class="btn bad" onclick="closeModal(); doLogout()">🚪 Logout</button>`);
+}
+
+setInterval(() => { if(currentUser && state.role === 'user' && state.view === 'shop'){ const bs = DB.banners.filter(b => b.active); if(bs.length > 1){ state.bannerIdx = (state.bannerIdx + 1) % bs.length; renderBanners(); } } }, 4500);
+window.addEventListener('offline', () => { toast('📶 Internet ပြတ်သွားပါပြီ'); });
+window.addEventListener('online', () => { toast('✅ Internet ပြန်ရပါပြီ'); });
+
+Object.assign(window, { togglePw, doLogin, doLogout, showModal, closeModal, toast, setRole, setView, setAdminTab, setCat, setBanner, onSearch, onUserSearch, addToCart, changeQty, removeItem, openPay, handleReceiptUpload, confirmPay, previewReceipt, approveOrder, rejectOrder, openBannerEdit, saveBannerEdit, toggleBanner, deleteBanner, bnLivePreview, openCampaignEdit, saveCampaignEdit, toggleCampaign, deleteCampaign, openAnnEdit, saveAnnEdit, toggleAnn, deleteAnn, previewAnn, setActiveMMQR, previewMMQR, openMMQREdit, saveMMQREdit, openUserModal, saveUser, deleteUser, toggleUserStatus, editProduct, saveProductEdit, deleteProduct, viewProfile, render });
+
+document.getElementById('authScreen').style.display = 'flex';
+showLoading('စတင်နေသည်...');
+
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    authUser = user;
+    try {
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if(userDoc.exists()){
+        const uData = userDoc.data();
+        if(uData.status === 'suspended'){ await signOut(auth); hideLoading(); document.getElementById('authScreen').style.display = 'flex'; toast('⛔ ဤအကောင့်ကို ပိတ်ထားပါသည်'); return; }
+        currentUser = { uid: user.uid, ...uData };
+        hideLoading(); await enterApp();
+      } else { await signOut(auth); hideLoading(); document.getElementById('authScreen').style.display = 'flex'; }
+    } catch(e){ hideLoading(); document.getElementById('authScreen').style.display = 'flex'; console.error(e); }
+  } else {
+    currentUser = null; authUser = null; hideLoading(); document.getElementById('authScreen').style.display = 'flex';
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter'){
+    const as = document.getElementById('authScreen');
+    if(as.style.display !== 'none'){ const el = document.activeElement; if(el && (el.id === 'liUser' || el.id === 'liPass')) doLogin(); }
+  }
+});
+</script>
+</body>
+</html>
